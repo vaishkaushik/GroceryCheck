@@ -1,0 +1,20 @@
+{
+  "milk": {
+    "unit": "liter",
+    "blinkit": 68,
+    "zepto": 64,
+    "instamart": 66
+  },
+  "atta": {
+    "unit": "kg",
+    "blinkit": 52,
+    "zepto": 50,
+    "instamart": 51
+  },
+  "tomato": {
+    "unit": "kg",
+    "blinkit": 40,
+    "zepto": 35,
+    "instamart": 38
+  }
+}
