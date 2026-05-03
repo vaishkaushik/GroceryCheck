@@ -8,16 +8,48 @@ def load_prices():
     with open("data/prices.json") as f:
         return json.load(f)
 
-# Parse input
+
+import re
+
+def normalize_item(word):
+    mapping = {
+        "tomatoes": "tomato",
+        "onions": "onion",
+        "potatoes": "potato",
+        "litre": "liter",
+        "ltr": "liter"
+    }
+    return mapping.get(word, word)
+
 def parse_input(text):
     items = []
-    for line in text.strip().split("\n"):
-        if line.strip():
-            parts = line.split()
-            if len(parts) == 2:
-                items.append((parts[0].lower(), float(parts[1])))
-    return items
 
+    for line in text.strip().split("\n"):
+        line = line.lower().strip()
+
+        # Extract number (supports "half", "1", "2.5")
+        qty = 1
+
+        if "half" in line:
+            qty = 0.5
+        else:
+            num = re.search(r"\d+\.?\d*", line)
+            if num:
+                qty = float(num.group())
+
+        # Detect unit
+        if "g" in line and "kg" not in line:
+            qty = qty / 1000
+        if "ml" in line:
+            qty = qty / 1000
+
+        # Extract item (last word usually)
+        words = line.split()
+        item = normalize_item(words[-1])
+
+        items.append((item, qty))
+
+    return items
 # Calculate total
 def calculate(cart, platform, prices):
     total = 0
